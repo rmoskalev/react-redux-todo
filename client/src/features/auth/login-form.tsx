@@ -20,7 +20,7 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
     try {
       await loginUser(formData).unwrap();
-      navigate('/todo');
+      navigate('/');
     } catch (err) {
       console.error('Login failed:', err);
     }

@@ -1,17 +1,19 @@
-import { useLogoutMutation, useCurrentQuery } from '@entities/profile';
-import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router-dom';
 
-const Navbar: React.FC = () => {
+import { logout, useCurrentQuery } from '@entities/profile';
+
+const Sidebar: React.FC = () => {
 	const navigate = useNavigate();
 	const { data: user, isLoading: isUserLoading } = useCurrentQuery();
-	const [logoutUser] = useLogoutMutation();
+	const dispatch = useDispatch();
 
 	const handleLogout = async () => {
 		try {
-			await logoutUser().unwrap();
-			navigate('/');
+			dispatch(logout());
+			localStorage.removeItem('token');
+			navigate('/auth');
 		} catch (err) {
 			console.error('Logout failed:', err);
 		}
@@ -60,4 +62,4 @@ const Navbar: React.FC = () => {
 	);
 };
 
-export default Navbar;
+export default Sidebar;

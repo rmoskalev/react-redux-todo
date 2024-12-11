@@ -1,6 +1,11 @@
 import { baseApi } from '@shared/api';
 import { z } from 'zod';
-import { userRegisterSchema, UserRegisterSchema, userSelectSchema, UserSelectSchema } from '../schemas';
+import {
+	userRegisterSchema,
+	UserRegisterSchema,
+	userSelectSchema,
+	UserSelectSchema,
+} from '../schemas';
 
 export const profileApi = baseApi.injectEndpoints({
 	endpoints: builder => ({
@@ -36,23 +41,12 @@ export const profileApi = baseApi.injectEndpoints({
 			}),
 			transformResponse: response => userSelectSchema.parse(response),
 		}),
-
-		logout: builder.mutation<void, void>({
-			query: () => ({
-				url: '/logout',
-				method: 'GET',
-			}),
-		}),
 	}),
 });
 
-export const {
-	useRegisterMutation,
-	useLoginMutation,
-	useCurrentQuery,
-	useLogoutMutation,
-} = profileApi;
+export const { useRegisterMutation, useLoginMutation, useCurrentQuery } =
+	profileApi;
 
 export const {
-	endpoints: { register, login, current, logout },
+	endpoints: { register, login, current },
 } = profileApi;
