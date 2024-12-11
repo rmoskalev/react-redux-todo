@@ -1,12 +1,12 @@
-import { useLogoutUserMutation, useUserSelectQuery } from '@entities/profile';
+import { useLogoutMutation, useCurrentQuery } from '@entities/profile';
 import React from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
 	const navigate = useNavigate();
-	const { data: user, isLoading: isUserLoading } = useUserSelectQuery();
-	const [logoutUser] = useLogoutUserMutation();
+	const { data: user, isLoading: isUserLoading } = useCurrentQuery();
+	const [logoutUser] = useLogoutMutation();
 
 	const handleLogout = async () => {
 		try {

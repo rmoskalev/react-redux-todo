@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLoginUserMutation } from '@entities/profile';
+import { useLoginMutation } from '@entities/profile';
 import { useNavigate } from 'react-router-dom';
 
 const LoginForm: React.FC = () => {
@@ -9,7 +9,7 @@ const LoginForm: React.FC = () => {
     password: '',
   });
 
-  const [loginUser, { isLoading, isError }] = useLoginUserMutation();
+  const [loginUser, { isLoading, isError }] = useLoginMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

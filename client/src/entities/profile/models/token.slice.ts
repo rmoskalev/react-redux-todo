@@ -1,51 +1,57 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { TOKEN_KEY } from '@shared/constants';
-import { profileEndpoints } from '../api';
+import { createSlice } from "@reduxjs/toolkit"
+import { AppState } from "@shared/types"
 
-type State = string | null;
+import { profileApi } from "../api"
 
-const initialState: State = localStorage.getItem(TOKEN_KEY);
 
-const saveToken = (token: string) => {
-	localStorage.setItem(TOKEN_KEY, token);
-	return token;
-};
+type User = {
+	name: string,
+	password?: string,
+	email: string
+}
 
-const removeToken = () => {
-	localStorage.removeItem(TOKEN_KEY);
-	return null;
-};
+interface InitialState {
+  user: User | null
+  isAuthenticated: boolean
+  current: User | null
+  token?: string
+}
 
-export const {
-	name: tokenSliceName,
-	reducer: tokenReducer,
-	selectors: { selectToken },
-} = createSlice({
-	name: 'token',
-	initialState,
-	selectors: {
-		selectToken: state => state,
-	},
-	reducers: {
-		resetToken: () => removeToken(),
-	},
-	extraReducers: builder => {
-		const { loginUser, logoutUser, userSelect, registerUser } =
-			profileEndpoints;
+const initialState: InitialState = {
+  user: null,
+  isAuthenticated: false,
+  current: null,
+}
 
-		builder.addMatcher(logoutUser.matchFulfilled, removeToken);
+const slice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {
+    logout: () => initialState,
+    resetUser: (state) => {
+      state.user = null
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(profileApi.endpoints.login.matchFulfilled, (state, action) => {
+        state.token = action.payload.token
+        state.isAuthenticated = true
+      })
+      .addMatcher(profileApi.endpoints.current.matchFulfilled, (state, action) => {
+        state.isAuthenticated = true
+        state.current = action.payload
+      })
 
-		builder.addMatcher(userSelect.matchRejected, state => {
-			if (!state) return null;
-			return removeToken();
-		});
+  },
+})
 
-		builder.addMatcher(loginUser.matchFulfilled, (_, { payload }) => {
-			return payload?.token ? saveToken(payload.token) : removeToken();
-		});
+export const { logout, resetUser } = slice.actions
+export default slice.reducer
 
-		builder.addMatcher(registerUser.matchFulfilled, (_, { payload }) => {
-			return payload?.token ? saveToken(payload.token) : removeToken();
-		});
-	},
-});
+export const selectIsAuthenticated = (state: AppState) =>
+  state.auth.isAuthenticated
+
+export const selectCurrent = (state: AppState) => state.auth.current
+
+export const selectUser = (state: AppState) => state.auth.user

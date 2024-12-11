@@ -14,17 +14,13 @@ export const baseApi = createApi({
 		},
 		prepareHeaders(headers, { getState }) {
 			const state = getState() as AppState;
-			const token = state.token;
+			const token = state.auth.token || localStorage.getItem('token');
 
 			if (token) {
-				headers.set('Authorization', `Bearer ${token}`);
+				headers.set('authorization', `Bearer ${token}`);
 			}
 			return headers;
 		},
 	}),
 	endpoints: () => ({}),
 });
-
-export const {
-	util: { resetApiState },
-} = baseApi;

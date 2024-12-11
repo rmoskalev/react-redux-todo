@@ -9,10 +9,8 @@ export const userSelectSchema = z.object({
 	name: z.string().min(1, 'Name is required'),
 	email: z.string().email('Invalid email format'),
 	role: z.enum(['user', 'admin', 'creator']),
-	photo: z.string().url('Invalid photo URL').optional(),
-	bio: z.string().optional(),
 	isVerified: z.boolean(),
-	token: z.string(),
+	token: z.string().optional(),
 });
 
 export type UserSelectSchema = z.infer<typeof userSelectSchema>;

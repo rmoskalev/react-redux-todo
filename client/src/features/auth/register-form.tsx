@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useRegisterUserMutation } from '@entities/profile';
+import { useLoginMutation, useRegisterMutation } from '@entities/profile';
 import { useNavigate } from 'react-router-dom';
 
 const RegisterForm: React.FC = () => {
@@ -10,7 +10,9 @@ const RegisterForm: React.FC = () => {
     password: '',
   });
 
-  const [registerUser, { isLoading, isError }] = useRegisterUserMutation();
+
+  const [registerUser, { isLoading, isError }] = useRegisterMutation();
+  const [loginUser] = useLoginMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -19,10 +21,13 @@ const RegisterForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     try {
       await registerUser(formData).unwrap();
+      await loginUser(formData).unwrap()
       navigate('/todo');
     } catch (err) {
+      console.log(err)
       console.error('Registration failed:', err);
     }
   };

@@ -1,47 +1,35 @@
 import { baseApi } from '@shared/api';
 import { z } from 'zod';
-import { userSelectSchema, UserSelectSchema } from '../schemas';
+import { userRegisterSchema, UserRegisterSchema, userSelectSchema, UserSelectSchema } from '../schemas';
 
-const USER_TAG = 'User';
-
-export const {
-	endpoints: profileEndpoints,
-	useRegisterUserMutation,
-	useLoginUserMutation,
-	useUserSelectQuery,
-	useLazyUserSelectQuery,
-	useLogoutUserMutation,
-} = baseApi.enhanceEndpoints({ addTagTypes: [USER_TAG] }).injectEndpoints({
-	overrideExisting: false,
+export const profileApi = baseApi.injectEndpoints({
 	endpoints: builder => ({
-		registerUser: builder.mutation<
-			UserSelectSchema,
+		register: builder.mutation<
+			UserRegisterSchema,
 			{ name: string; email: string; password: string }
 		>({
-			invalidatesTags: [USER_TAG],
-			query: body => ({
+			query: userData => ({
 				url: '/register',
 				method: 'POST',
-				body,
+				body: userData,
 			}),
-			transformResponse: response => userSelectSchema.parse(response),
+			transformResponse: response => userRegisterSchema.parse(response),
 		}),
 
-		loginUser: builder.mutation<
+		login: builder.mutation<
 			{ token: string },
 			{ email: string; password: string }
 		>({
-			query: body => ({
+			query: userData => ({
 				url: '/login',
 				method: 'POST',
-				body,
+				body: userData,
 			}),
 			transformResponse: response =>
 				z.object({ token: z.string() }).parse(response),
 		}),
 
-		userSelect: builder.query<UserSelectSchema, void>({
-			providesTags: [USER_TAG],
+		current: builder.query<UserSelectSchema, void>({
 			query: () => ({
 				url: '/user',
 				method: 'GET',
@@ -49,8 +37,7 @@ export const {
 			transformResponse: response => userSelectSchema.parse(response),
 		}),
 
-		logoutUser: builder.mutation<void, void>({
-			invalidatesTags: [USER_TAG],
+		logout: builder.mutation<void, void>({
 			query: () => ({
 				url: '/logout',
 				method: 'GET',
@@ -58,3 +45,14 @@ export const {
 		}),
 	}),
 });
+
+export const {
+	useRegisterMutation,
+	useLoginMutation,
+	useCurrentQuery,
+	useLogoutMutation,
+} = profileApi;
+
+export const {
+	endpoints: { register, login, current, logout },
+} = profileApi;

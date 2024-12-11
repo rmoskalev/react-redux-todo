@@ -29,8 +29,6 @@ export const registerUser = asyncHandler(async (req, res) => {
     password,
   });
 
-  const token = generateToken(user._id);
-
   if (user) {
     const { _id, name, email, role, isVerified } = user;
 
@@ -40,7 +38,6 @@ export const registerUser = asyncHandler(async (req, res) => {
       email,
       role,
       isVerified,
-      token,
     });
   } else {
     res.status(400).json({ message: "Invalid user data" });
@@ -89,7 +86,7 @@ export const logoutUser = asyncHandler(async (req, res) => {
 });
 
 export const getUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id).select("-password");
+  const user = await User.findById(req.user.id).select("-password");
 
   if (user) {
     res.status(200).json(user);
