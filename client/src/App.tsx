@@ -1,8 +1,17 @@
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+
+import Auth from '@pages/auth';
+import Home from '@pages/home';
+
 const App = () => {
 	return (
-		<h1 className="text-4xl font-bold mb-4 text-purple-500">
-			Добро пожаловать!
-		</h1>
+		<Router>
+			<Routes>
+				<Route path="/" element={<Auth />} />
+
+				<Route path="/todo" element={<Home />} />
+			</Routes>
+		</Router>
 	);
 };
 

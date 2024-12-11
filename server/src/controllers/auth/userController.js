@@ -1,6 +1,5 @@
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 import User from "../../models/auth/UserModel.js";
 import generateToken from "../../helpers/generateToken.js";
@@ -31,14 +30,6 @@ export const registerUser = asyncHandler(async (req, res) => {
   });
 
   const token = generateToken(user._id);
-
-  res.cookie("token", token, {
-    path: "/",
-    httpOnly: true,
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-    sameSite: "none",
-    secure: false,
-  });
 
   if (user) {
     const { _id, name, email, role, isVerified } = user;
@@ -80,14 +71,6 @@ export const loginUser = asyncHandler(async (req, res) => {
   if (userExists && isMatch) {
     const { _id, name, email, role, isVerified } = userExists;
 
-    res.cookie("token", token, {
-      path: "/",
-      httpOnly: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      sameSite: "none",
-      secure: true,
-    });
-
     res.status(200).json({
       _id,
       name,
@@ -102,13 +85,6 @@ export const loginUser = asyncHandler(async (req, res) => {
 });
 
 export const logoutUser = asyncHandler(async (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    sameSite: "none",
-    secure: true,
-    path: "/",
-  });
-
   res.status(200).json({ message: "User logged out" });
 });
 
