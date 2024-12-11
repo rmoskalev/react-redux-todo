@@ -1,0 +1,18 @@
+{
+    "printWidth": 80,
+    "tabWidth": 2,
+    "useTabs": true,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "arrowParens": "avoid",
+    "endOfLine": "lf",
+    "jsxBracketSameLine": false,
+    "jsxSingleQuote": false,
+    "proseWrap": "preserve",
+    "htmlWhitespaceSensitivity": "css",
+    "plugins": [
+        "prettier-plugin-organize-imports"
+    ]
+}
