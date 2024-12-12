@@ -1,5 +1,6 @@
-import { profileApi } from '@entities/profile';
 import { createListenerMiddleware } from '@reduxjs/toolkit';
+
+import { profileApi } from '@entities/profile';
 
 export const listenerMiddleware = createListenerMiddleware();
 

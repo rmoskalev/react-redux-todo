@@ -1,5 +1,7 @@
-import { baseApi } from '@shared/api';
 import { z } from 'zod';
+
+import { baseApi } from '@shared/api';
+
 import {
 	userRegisterSchema,
 	UserRegisterSchema,

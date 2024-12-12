@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import LoginForm from '@features/auth/login-form';
 import RegisterForm from '@features/auth/register-form';

@@ -7,7 +7,8 @@ import { AppGuard } from '@app/guard/app-guard';
 import { store } from '@app/store/store.ts';
 import { AuthGuard } from '@features/auth/auth-guard';
 import Auth from '@pages/auth.tsx';
-import { Layout } from '@shared/components/layout.tsx';
+import { Layout } from '@pages/layout';
+import Tasks from '@pages/tasks';
 
 import './index.css';
 
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: '',
-				element: <div></div>,
+				element: <Tasks />,
 			},
 		],
 	},
@@ -40,7 +41,7 @@ createRoot(document.getElementById('root')!).render(
 	<StrictMode>
 		<ReduxProvider store={store}>
 			<AuthGuard>
-					<RouterProvider router={router} />
+				<RouterProvider router={router} />
 			</AuthGuard>
 		</ReduxProvider>
 	</StrictMode>,

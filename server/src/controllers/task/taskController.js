@@ -4,7 +4,7 @@ import TaskModel from "../../models/tasks/TaskModel.js";
 
 export const createTask = asyncHandler(async (req, res) => {
   try {
-    const { title, description, dueDate, priority, status } = req.body;
+    const { title, description, priority, status } = req.body;
 
     if (!title || title.trim() === "") {
       res.status(400).json({ message: "Title is required!" });
@@ -13,10 +13,9 @@ export const createTask = asyncHandler(async (req, res) => {
     const task = new TaskModel({
       title,
       description,
-      dueDate,
       priority,
       status,
-      user: req.user._id,
+      user: req.user.id,
     });
 
     await task.save();
@@ -30,7 +29,7 @@ export const createTask = asyncHandler(async (req, res) => {
 
 export const getTasks = asyncHandler(async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user.id;
 
     if (!userId) {
       res.status(400).json({ message: "User not found!" });
@@ -38,10 +37,7 @@ export const getTasks = asyncHandler(async (req, res) => {
 
     const tasks = await TaskModel.find({ user: userId });
 
-    res.status(200).json({
-      length: tasks.length,
-      tasks,
-    });
+    res.status(200).json(tasks);
   } catch (error) {
     console.log("Error in getTasks: ", error.message);
     res.status(500).json({ message: error.message });
@@ -50,7 +46,7 @@ export const getTasks = asyncHandler(async (req, res) => {
 
 export const getTask = asyncHandler(async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user.id;
 
     const { id } = req.params;
 
@@ -77,7 +73,7 @@ export const getTask = asyncHandler(async (req, res) => {
 
 export const updateTask = asyncHandler(async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user.id;
 
     const { id } = req.params;
     const { title, description, dueDate, priority, status, completed } =
@@ -115,7 +111,7 @@ export const updateTask = asyncHandler(async (req, res) => {
 
 export const deleteTask = asyncHandler(async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user.id;
     const { id } = req.params;
 
     const task = await TaskModel.findById(id);
@@ -139,7 +135,7 @@ export const deleteTask = asyncHandler(async (req, res) => {
 
 export const deleteAllTasks = asyncHandler(async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user.id;
 
     const tasks = await TaskModel.find({ user: userId });
 

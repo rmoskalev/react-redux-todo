@@ -11,7 +11,7 @@ import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/tasks", getTasks);
+router.get("/tasks", protect, getTasks);
 router.get("/task/:id", protect, getTask);
 router.post("/task/create", protect, createTask);
 router.put("/task/:id", protect, updateTask);

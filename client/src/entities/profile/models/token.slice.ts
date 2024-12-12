@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+
 import { AppState } from "@shared/types"
 
 import { profileApi } from "../api"
